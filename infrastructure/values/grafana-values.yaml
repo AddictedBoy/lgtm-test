@@ -32,6 +32,11 @@ data:
               prometheusType: Mimir
               cacheLevel: "High"
               incrementalQuerying: true
+              tracesToLogs:
+                datasourceUid: loki
+                tags: ["pod", "namespace"]
+              tracesToTraces:
+                datasourceUid: tempo
 
           - name: Loki
             type: loki
@@ -40,6 +45,15 @@ data:
             editable: true
             jsonData:
               maxLines: 1000
+              derivedFields:
+                - name: trace_id
+                  matcherRegex: "trace_id=(\\w+)"
+                  url: "http://localhost:3000/explore?left=%7B%22datasourceUid%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22$${trace_id}%22%5D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+                  datasourceUid: tempo
+              tracesToLogs:
+                datasourceUid: tempo
+              tracesToMetrics:
+                datasourceUid: mimir
 
           - name: Tempo
             type: tempo
