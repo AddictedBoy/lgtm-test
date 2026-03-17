@@ -15,9 +15,6 @@ data:
         path_prefix: /loki
       storage:
         type: filesystem
-        filesystem:
-          chunks_directory: /loki/chunks
-          rules_directory: /loki/rules
       schema_config:
         configs:
           - from: 2020-10-24
@@ -27,25 +24,24 @@ data:
             index:
               prefix: index_
               period: 24h
-      limits_config:
-        retention_period: 168h
-        max_entries_limit_per_query: 5000
 
     singleBinary:
-      replicas: 1
-      persistence:
-        enabled: true
-        size: 10Gi
-        storageClass: standard
+      replicas: 0
+
+    simpleScalable:
+      enabled: false
+
+    backend:
+      replicas: 0
+
+    read:
+      replicas: 0
+
+    write:
+      replicas: 0
 
     gateway:
       enabled: true
       replicas: 1
       service:
         type: NodePort
-
-    monitoring:
-      selfMonitoring:
-        enabled: true
-        grafanaAgent:
-          installOperator: false
