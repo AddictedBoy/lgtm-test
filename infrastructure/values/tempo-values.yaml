@@ -11,6 +11,19 @@ data:
       server:
         http_listen_port: 3200
         grpc_listen_port: 9096
+      metricsGenerator:
+        enabled: true
+        registry:
+          external_labels:
+            cluster: 'observability'
+        processor:
+          service_graphs:
+            wait: 10s
+            max_neighbors: 100
+            store:
+              edge_path: /var/tempo/wal/service_graphs
+        store:
+          path: /var/tempo/wal/metrics
       storage:
         trace:
           backend: local
