@@ -5,7 +5,7 @@ This repository contains FluxCD manifests to deploy the LGTM (Loki, Grafana, Tem
 ## Repository Structure
 
 ```
-lgtm-npd/
+lgtm-test/
 ├── clusters/
 │   └── air-gapped/
 │       ├── flux-system/          # Flux system components
@@ -31,7 +31,7 @@ brew install fluxcd/tap/flux
 ```bash
 flux bootstrap github \
   --owner=<your-github-org> \
-  --repository=lgtm-npd \
+  --repository=lgtm-test \
   --branch=main \
   --path=clusters/air-gapped \
   --personal
@@ -49,7 +49,7 @@ flux get all --all-namespaces
 ```
 
 You should see:
-- GitRepository: `lgtm-npd`
+- GitRepository: `lgtm-test`
 - HelmRepository: `grafana-charts`
 - Kustomizations: `clusters`, `apps`, `infrastructure`
 
@@ -64,10 +64,10 @@ After running `flux bootstrap`, you'll see something like:
 ✔ configured service account for GitHub
 ✔ generated deploy key (GitHub deploy key)
 ✔ pushing flux-system manifests
-✔ cloning <org>/lgtm-npd branch
+✔ cloning <org>/lgtm-test branch
 ✔ reconciling flux-system manifests
-✔ committed flux-system manifests to <org>/lgtm-npd/main
-✔ pushed flux-system manifests to <org>/lgtm-npd/main
+✔ committed flux-system manifests to <org>/lgtm-test/main
+✔ pushed flux-system manifests to <org>/lgtm-test/main
 ◎ waiting for kustomization/flux-system to be reconciled
 ✔ kustomization/flux-system reconciled
 ```
@@ -125,7 +125,7 @@ flux logs --level=debug
 flux get sources git
 
 # Force reconciliation
-flux reconcile source git lgtm-npd
+flux reconcile source git lgtm-test
 flux reconcile kustomization apps --with-source
 ```
 

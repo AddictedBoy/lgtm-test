@@ -8,7 +8,7 @@ spec:
   interval: 1h
   sourceRef:
     kind: GitRepository
-    name: lgtm-npd
+    name: lgtm-test
     namespace: flux-system
   path: ./infrastructure
   prune: true

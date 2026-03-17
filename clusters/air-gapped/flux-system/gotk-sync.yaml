@@ -8,7 +8,7 @@ spec:
   interval: 60s
   ref:
     branch: main
-  url: https://github.com/<org>/lgtm-npd
+  url: https://github.com/AddictedBoy/lgtm-test
   secretRef:
     name: flux-system
 ---
