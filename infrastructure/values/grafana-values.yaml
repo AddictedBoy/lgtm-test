@@ -50,6 +50,17 @@ data:
               tracesToLogs:
                 datasourceUid: loki
                 tags: ["pod", "namespace"]
+              tracesToMetrics:
+                datasourceUid: mimir
+                tags: [{"key": "service.name", "value": "service"}]
+              nodeGraph:
+                enabled: true
+              serviceMap:
+                datasourceUid: mimir
+              search:
+                hide: false
+              lokiSearch:
+                datasourceUid: loki
 
     # Disable sidecar for now (requires quay.io access)
     # sidecar:
