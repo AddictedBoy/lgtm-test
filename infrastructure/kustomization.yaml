@@ -4,4 +4,7 @@ kind: Kustomization
 resources:
   - helmrelease-lgtm.yaml
   - values/lgtm-values.yaml
+  - values/grafana-values.yaml
+  - values/loki-values.yaml
+  - values/tempo-values.yaml
   - ../dashboards/

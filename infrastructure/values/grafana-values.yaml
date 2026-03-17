@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-values
+  namespace: observability
+data:
+  values.yaml: |
+    # Grafana Configuration
+    admin:
+      user: admin
+      password: admin123
+
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClassName: standard
+
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Mimir
+            type: prometheus
+            access: proxy
+            url: http://lgtm-stack-mimir-gateway.observability.svc:80/prometheus
+            isDefault: true
+            editable: true
+            jsonData:
+              timeInterval: 60s
+              httpMethod: POST
+              prometheusType: Mimir
+              cacheLevel: "High"
+              incrementalQuerying: true
+
+          - name: Loki
+            type: loki
+            access: proxy
+            url: http://loki-gateway.observability.svc.cluster.local/
+            editable: true
+            jsonData:
+              maxLines: 1000
+
+          - name: Tempo
+            type: tempo
+            access: proxy
+            url: http://tempo.observability.svc:3100
+            editable: true
+            jsonData:
+              tracesToLogs:
+                datasourceUid: loki
+                tags: ["pod", "namespace"]
+
+    sidecar:
+      dashboards:
+        enabled: true
+        label: grafana_dashboard
+        folder: /tmp/dashboards
+        provider:
+          name: sidecarProvider
+          orgid: 1
+          folder: ""
+          type: file
+          disableDelete: false
+          allowUiUpdates: true
+      datasources:
+        enabled: true
+        label: grafana_datasource
+
+    service:
+      type: NodePort
+      port: 80
+      targetPort: 3000
