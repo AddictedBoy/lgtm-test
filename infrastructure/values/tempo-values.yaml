@@ -21,6 +21,10 @@ data:
             wait: 10s
         store:
           path: /var/tempo/wal
+        remote_write:
+          - url: http://lgtm-stack-mimir-gateway.observability.svc:80/api/v1/push
+            tls:
+              insecure: true
       storage:
         trace:
           backend: local
