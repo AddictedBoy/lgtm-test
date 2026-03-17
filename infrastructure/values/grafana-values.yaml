@@ -51,21 +51,22 @@ data:
                 datasourceUid: loki
                 tags: ["pod", "namespace"]
 
-    sidecar:
-      dashboards:
-        enabled: true
-        label: grafana_dashboard
-        folder: /tmp/dashboards
-        provider:
-          name: sidecarProvider
-          orgid: 1
-          folder: ""
-          type: file
-          disableDelete: false
-          allowUiUpdates: true
-      datasources:
-        enabled: true
-        label: grafana_datasource
+    # Disable sidecar for now (requires quay.io access)
+    # sidecar:
+    #   dashboards:
+    #     enabled: true
+    #     label: grafana_dashboard
+    #     folder: /tmp/dashboards
+    #     provider:
+    #       name: sidecarProvider
+    #       orgid: 1
+    #       folder: ""
+    #       type: file
+    #       disableDelete: false
+    #       allowUiUpdates: true
+    #   datasources:
+    #     enabled: true
+    #     label: grafana_datasource
 
     service:
       type: NodePort

@@ -10,35 +10,18 @@ data:
     loki:
       auth_enabled: false
       deploymentMode: SingleBinary
+      useTestSchema: true
       common:
         replication_factor: 1
         path_prefix: /loki
       storage:
         type: filesystem
-      schema_config:
-        configs:
-          - from: 2020-10-24
-            store: tsdb
-            object_store: filesystem
-            schema: v13
-            index:
-              prefix: index_
-              period: 24h
 
     singleBinary:
       replicas: 0
 
     simpleScalable:
       enabled: false
-
-    backend:
-      replicas: 0
-
-    read:
-      replicas: 0
-
-    write:
-      replicas: 0
 
     gateway:
       enabled: true
