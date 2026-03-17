@@ -19,9 +19,6 @@ data:
         processor:
           service_graphs:
             wait: 10s
-            max_neighbors: 100
-            store:
-              edge_path: /var/tempo/wal/service_graphs
         store:
           path: /var/tempo/wal/metrics
       storage:
