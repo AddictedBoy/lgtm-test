@@ -11,6 +11,12 @@ data:
       user: admin
       password: admin123
 
+    featureToggles:
+      exploreHints: true
+      exploreMixedDatasource: true
+
+    explore:
+
     # persistence:
     #   enabled: true
     #   size: 5Gi
