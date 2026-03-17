@@ -1,0 +1,22 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: lgtm-npd
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/<org>/lgtm-npd
+  ref:
+    branch: main
+  secretRef:
+    name: github-credentials
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: grafana-charts
+  namespace: flux-system
+spec:
+  url: https://grafana.github.io/helm-charts
+  interval: 24h

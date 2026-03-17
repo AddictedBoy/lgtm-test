@@ -1,0 +1,6 @@
+# Placeholder for FluxCD components
+# Run: flux export --all > flux-config/gotk-components.yaml
+# on a machine with flux installed to generate actual components
+
+# This file will be replaced by the actual FluxCD manifests
+# when you run the export command
