@@ -44,7 +44,7 @@ data:
           - name: Tempo
             type: tempo
             access: proxy
-            url: http://tempo.observability.svc:3100
+            url: http://tempo.observability.svc:3200
             editable: true
             jsonData:
               tracesToLogs:
