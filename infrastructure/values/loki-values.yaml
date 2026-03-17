@@ -9,6 +9,7 @@ data:
     # Loki Configuration
     loki:
       auth_enabled: false
+      deploymentMode: SingleBinary
       common:
         replication_factor: 1
         path_prefix: /loki
