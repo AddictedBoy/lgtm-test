@@ -1,17 +1,8 @@
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
+apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-metadata:
-  name: clusters
-  namespace: flux-system
-spec:
-  interval: 10m
-  sourceRef:
-    kind: GitRepository
-    name: lgtm-test
-    namespace: flux-system
-  path: ./clusters/air-gapped
-  prune: true
-  wait: true
-  timeout: 5m
-  retryInterval: 1m
+
+resources:
+  - repositories.yaml
+  - flux-system/
+  - apps-kustomization.yaml
+  - infrastructure-kustomization.yaml
