@@ -34,7 +34,7 @@ tasks:
         echo "Username: admin"
         echo "Password: admin123"
         
-        kubectl port-forward -n {{.NAMESPACE}} svc/grafana 3000:3000 &
+        kubectl port-forward -n {{.NAMESPACE}} svc/grafana 3000:80 &
         kubectl port-forward -n {{.NAMESPACE}} svc/sample-logs-app 8091:8091 &
         kubectl port-forward -n {{.NAMESPACE}} svc/sample-traces-app 8081:8081 &
         kubectl port-forward -n {{.NAMESPACE}} svc/sample-metrics-app 8090:8090 &
@@ -120,7 +120,7 @@ tasks:
         echo "Username: admin"
         echo "Password: admin123"
         
-        kubectl port-forward -n {{.NAMESPACE}} svc/grafana 3000:3000 &
+        kubectl port-forward -n {{.NAMESPACE}} svc/grafana 3000:80 &
         kubectl port-forward -n {{.NAMESPACE}} svc/loki-gateway 3100:80 &
         kubectl port-forward -n {{.NAMESPACE}} svc/tempo 3200:3200 &
         kubectl port-forward -n {{.NAMESPACE}} svc/lgtm-stack-mimir-gateway 8080:80 &
