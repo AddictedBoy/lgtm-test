@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - repositories.yaml
-  - flux-system/
+  - flux-system/gotk-components.yaml
+  - flux-system/gotk-sync.yaml
+  - flux-system/source-rbac.yaml
   - apps-kustomization.yaml
   - infrastructure-kustomization.yaml
