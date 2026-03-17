@@ -9,8 +9,6 @@ spec:
   url: https://github.com/AddictedBoy/lgtm-test
   ref:
     branch: main
-  secretRef:
-    name: github-credentials
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
