@@ -22,9 +22,6 @@ data:
         replication_factor: 1
       storage:
         type: filesystem
-        filesystem:
-          chunks_directory: /loki/chunks
-          rules_directory: /loki/rules
         bucketNames:
           chunks: chunks
           ruler: ruler
