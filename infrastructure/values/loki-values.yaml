@@ -6,22 +6,25 @@ metadata:
   namespace: observability
 data:
   values.yaml: |
-    # Loki Configuration
+    # Loki Configuration - Simple Single Binary
     loki:
       auth_enabled: false
-      deploymentMode: SingleBinary
-      useTestSchema: true
       common:
         replication_factor: 1
         path_prefix: /loki
-      storage:
-        type: filesystem
+        storage:
+          type: filesystem
 
-    singleBinary:
+    # Disable all scalable components
+    backend:
       replicas: 0
-
-    simpleScalable:
-      enabled: false
+    read:
+      replicas: 0
+    write:
+      replicas: 0
+    
+    singleBinary:
+      replicas: 1
 
     gateway:
       enabled: true
