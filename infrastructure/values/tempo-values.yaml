@@ -18,9 +18,6 @@ data:
             wait: 10s
         storage:
           path: /var/tempo/metrics
-        registry:
-          external_labels:
-            cluster: observability
       storage:
         trace:
           backend: local
