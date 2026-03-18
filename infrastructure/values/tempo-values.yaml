@@ -11,8 +11,6 @@ data:
       server:
         http_listen_port: 3200
         grpc_listen_port: 9096
-      metricsGenerator:
-        {}
       storage:
         trace:
           backend: local
@@ -38,6 +36,17 @@ data:
                 endpoint: 0.0.0.0:4317
               http:
                 endpoint: 0.0.0.0:4318
+
+    metricsGenerator:
+      enabled: true
+      processor:
+        service_graphs:
+          wait: 10s
+      storage:
+        path: /var/tempo/metrics
+      registry:
+        external_labels:
+          cluster: observability
 
     persistence:
       enabled: true
