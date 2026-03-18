@@ -18,6 +18,7 @@ data:
             wait: 10s
         storage:
           path: /var/tempo/metrics
+        remote_write: []
       storage:
         trace:
           backend: local
