@@ -1,0 +1,449 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: drilldown-dashboard
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+data:
+  drilldown.json: |
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 1,
+      "id": null,
+      "links": [
+        {
+          "asDropdown": false,
+          "icon": "external link",
+          "tags": [],
+          "targetBlank": true,
+          "title": "Tempo Service Graph",
+          "tooltip": "Open Service Graph in Tempo",
+          "type": "link",
+          "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+        }
+      ],
+      "liveNow": false,
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+          "id": 1,
+          "panels": [],
+          "title": "Service Overview",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 1},
+          "id": 2,
+          "options": {
+            "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+              "expr": "sum(rate(traces_service_graph_request_total{server=\"sample-javascript-traces-app\"}[5m])) by (client)",
+              "legendFormat": "{{client}} → sample-javascript-traces-app",
+              "refId": "A"
+            }
+          ],
+          "title": "Entry: user → sample-javascript-traces-app",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 1},
+          "id": 3,
+          "options": {
+            "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+              "expr": "sum(rate(traces_service_graph_request_total{server=\"sample-traces-app\"}[5m])) by (client)",
+              "legendFormat": "{{client}} → sample-traces-app",
+              "refId": "A"
+            }
+          ],
+          "title": "Entry: user → sample-traces-app",
+          "type": "timeseries"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 9},
+          "id": 4,
+          "panels": [],
+          "title": "Service Graph",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "custom": {"hideFrom": {"legend": false, "tooltip": false, "viz": false}},
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 12, "w": 24, "x": 0, "y": 10},
+          "id": 5,
+          "options": {"showNodeGraph": true, "unit": "s"},
+          "targets": [{"datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"}, "refId": "A", "queryType": "serviceMap"}],
+          "title": "Service Graph (Tempo)",
+          "type": "traces"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 22},
+          "id": 6,
+          "panels": [],
+          "title": "Request Rate & Error Rate",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 23},
+          "id": 7,
+          "options": {
+            "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+              "expr": "sum(rate(traces_service_graph_request_total[5m])) by (client, server)",
+              "legendFormat": "{{client}} -> {{server}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Request Rate (5m avg)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "line"}
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [{"color": "green", "value": null}, {"color": "red", "value": 0.01}]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 23},
+          "id": 8,
+          "options": {
+            "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+              "expr": "sum(rate(traces_service_graph_request_failed_total[5m])) by (client, server) / sum(rate(traces_service_graph_request_total[5m])) by (client, server)",
+              "legendFormat": "{{client}} -> {{server}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Error Rate (5m avg)",
+          "type": "timeseries"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 31},
+          "id": 9,
+          "panels": [],
+          "title": "Latency",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32},
+          "id": 10,
+          "options": {
+            "legend": {"calcs": ["mean", "max", "p95"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+              "expr": "histogram_quantile(0.95, sum(rate(traces_service_graph_request_server_seconds_bucket[5m])) by (le, client, server))",
+              "legendFormat": "p95: {{client}} -> {{server}}",
+              "refId": "A"
+            }
+          ],
+          "title": "p95 Latency",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32},
+          "id": 11,
+          "options": {
+            "legend": {"calcs": ["mean", "max"], "displayMode": "table", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "targets": [
+            {
+              "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+              "expr": "histogram_quantile(0.99, sum(rate(traces_service_graph_request_server_seconds_bucket[5m])) by (le, client, server))",
+              "legendFormat": "p99: {{client}} -> {{server}}",
+              "refId": "A"
+            }
+          ],
+          "title": "p99 Latency",
+          "type": "timeseries"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 40},
+          "id": 12,
+          "panels": [],
+          "title": "Recent Traces",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "custom": {"align": "auto", "cellOptions": {"type": "auto"}, "inspect": false},
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}
+            },
+            "overrides": [
+              {
+                "matcher": {"id": "byName", "options": "Trace ID"},
+                "properties": [
+                  {
+                    "id": "links",
+                    "value": [
+                      {"title": "View Trace", "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22query%22:%22$${__data.fields.Trace%20ID}%22,%22queryType%22:%22traceql%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"}
+                    ]
+                  }
+                ]
+              },
+              {
+                "matcher": {"id": "byName", "options": "trace_id"},
+                "properties": [{"id": "custom.hidden", "value": true}]
+              }
+            ]
+          },
+          "gridPos": {"h": 10, "w": 24, "x": 0, "y": 41},
+          "id": 13,
+          "options": {"showHeader": true},
+          "targets": [
+            {"datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"}, "filters": [], "limit": 20, "refId": "A", "queryType": "search"}
+          ],
+          "title": "Recent Traces",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {"trace_id": true},
+                "includeByName": {
+                  "Duration": true,
+                  "Name": true,
+                  "Root Service": true,
+                  "Root Span": true,
+                  "Service": true,
+                  "Trace ID": true
+                },
+                "renameByName": {
+                  "Duration": "Duration",
+                  "Name": "Span Name",
+                  "Root Service": "Root Service",
+                  "Root Span": "Root Span",
+                  "Service": "Service",
+                  "Trace ID": "Trace ID"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 38,
+      "style": "dark",
+      "tags": ["observability", "traces", "metrics"],
+      "templating": {"list": []},
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {"refresh_intervals": ["10s", "30s", "1m", "5m"]},
+      "timezone": "",
+      "title": "Observability Drilldown",
+      "uid": "drilldown",
+      "version": 1,
+      "weekStart": ""
+    }
