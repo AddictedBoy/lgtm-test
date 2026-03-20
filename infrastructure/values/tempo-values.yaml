@@ -6,26 +6,20 @@ metadata:
   namespace: observability
 data:
   values.yaml: |
-    # Tempo Configuration
     server:
       http_listen_port: 3200
       grpc_listen_port: 9096
     tempo:
       metricsGenerator:
         enabled: true
+        remoteWriteUrl: "http://lgtm-stack-mimir-gateway.observability.svc:80/api/v1/push"
         processor:
           service_graphs:
             wait: 10s
           span_metrics:
             enable_target_info: true
-          local_blocks:
-            filter_server_spans: false
         storage:
           path: /var/tempo/metrics
-          remote_write:
-            - url: http://lgtm-stack-mimir-gateway.observability.svc:80/api/v1/push
-              tls_config:
-                insecure_skip_verify: true
       storage:
         trace:
           backend: local
@@ -37,7 +31,6 @@ data:
             processors:
               - service-graphs
               - span-metrics
-              - local-blocks
             max_active_series: 10000
     distributor:
       receivers:
@@ -59,23 +52,12 @@ data:
               endpoint: 0.0.0.0:4317
             http:
               endpoint: 0.0.0.0:4318
-
     persistence:
       enabled: true
       size: 10Gi
       storageClassName: standard
-
     service:
       type: NodePort
-      ports:
-        otlp-http:
-          port: 4318
-          targetPort: 4318
-          protocol: TCP
-        otlp-grpc:
-          port: 4317
-          targetPort: 4317
-          protocol: TCP
     query_frontend:
       search:
         concurrent_jobs: 1000

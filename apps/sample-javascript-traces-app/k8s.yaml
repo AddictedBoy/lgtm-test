@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sample-javascript-traces-app
-          image: sample-javascript-traces-app:v52
+          image: sample-javascript-traces-app:v82
           imagePullPolicy: Never
           ports:
             - containerPort: 8082
@@ -31,6 +31,10 @@ spec:
               value: "http://alloy.observability.svc:4318"
             - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
               value: "http://alloy.observability.svc:4318/v1/traces"
+            - name: REDIS_HOST
+              value: "redis.observability.svc"
+            - name: REDIS_SERVER_PORT
+              value: "6379"
           resources:
             requests:
               cpu: 50m

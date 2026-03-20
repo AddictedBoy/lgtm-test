@@ -1,0 +1,21 @@
+{
+  "name": "sample-javascript-traces-app",
+  "version": "1.0.0",
+  "description": "Sample JavaScript app that generates traces to send to Tempo",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.8.0",
+    "@opentelemetry/sdk-node": "^0.48.0",
+    "@opentelemetry/resources": "^1.21.0",
+    "@opentelemetry/semantic-conventions": "^1.21.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.48.0",
+    "@opentelemetry/instrumentation-http": "^0.48.0",
+    "@opentelemetry/instrumentation-express": "^0.35.0",
+    "@opentelemetry/instrumentation-redis-4": "^0.37.0",
+    "express": "^4.18.2",
+    "redis": "^4.6.0"
+  }
+}
