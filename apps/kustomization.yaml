@@ -11,3 +11,4 @@ resources:
   - sample-operator-traces-app
   - sample-redis
   - sample-postgres
+  - traffic-generator
