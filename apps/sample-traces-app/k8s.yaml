@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: sample-traces-app
-          image: sample-traces-app:v2
+          image: sample-traces-app:v3
           imagePullPolicy: Never
           ports:
             - containerPort: 8081
@@ -43,6 +43,12 @@ spec:
               value: "postgres.observability.svc"
             - name: POSTGRES_PORT
               value: "5432"
+            - name: POSTGRES_USER
+              value: "appuser"
+            - name: POSTGRES_PASSWORD
+              value: "apppassword"
+            - name: POSTGRES_DB
+              value: "appdb"
             - name: REDIS_HOST
               value: "redis.observability.svc"
             - name: REDIS_PORT
