@@ -1,0 +1,67 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tempo-values
+  namespace: observability
+data:
+  values.yaml: |
+    server:
+      http_listen_port: 3200
+      grpc_listen_port: 9096
+    tempo:
+      metricsGenerator:
+        enabled: true
+        remoteWriteUrl: "http://lgtm-stack-mimir-gateway.observability.svc:80/api/v1/push"
+        processor:
+          service_graphs:
+            wait: 10s
+          span_metrics:
+            enable_target_info: true
+        storage:
+          path: /var/tempo/metrics
+      storage:
+        trace:
+          backend: local
+          local:
+            path: /var/tempo/traces
+      overrides:
+        defaults:
+          metrics_generator:
+            processors:
+              - service-graphs
+              - span-metrics
+            max_active_series: 10000
+    distributor:
+      receivers:
+        jaeger:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:14250
+            thrift_binary:
+              endpoint: 0.0.0.0:6832
+            thrift_compact:
+              endpoint: 0.0.0.0:6831
+            thrift_http:
+              endpoint: 0.0.0.0:14268
+        zipkin:
+          endpoint: 0.0.0.0:9411
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClassName: standard
+    service:
+      type: NodePort
+    query_frontend:
+      search:
+        concurrent_jobs: 1000
+        max_duration: 30m
+      traceql:
+        metrics:
+          enabled: true

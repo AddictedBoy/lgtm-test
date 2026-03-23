@@ -1,0 +1,63 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lgtm-values
+  namespace: observability
+data:
+  values.yaml: |
+    # LGTM Stack - Grafana Observability Suite
+    # Based on lgtm-stack/values.yaml
+
+    mimir:
+      enabled: true
+      structuredConfig:
+        multitenancy_enabled: false
+        ingester:
+          ring:
+            replication_factor: 1
+        limits:
+          ingestion_rate: 100000
+          ingestion_burst_size: 200000
+          max_global_series_per_user: 1000000
+          max_global_series_per_metric: 100000
+
+    loki:
+      enabled: true
+      auth_enabled: false
+      storage:
+        type: filesystem
+        filesystem:
+          chunks_directory: /loki/chunks
+          rules_directory: /loki/rules
+
+    tempo:
+      enabled: true
+      storage:
+        trace:
+          backend: local
+          local:
+            path: /var/tempo/traces
+
+    grafana:
+      enabled: true
+      admin:
+        user: admin
+        password: admin123
+      sidecar:
+        dashboards:
+          enabled: true
+          label: grafana_dashboard
+          folder: /tmp/dashboards
+          provider:
+            name: sidecarProvider
+            orgid: 1
+            folder: ""
+            type: file
+            disableDelete: false
+            allowUiUpdates: true
+
+    grafana-agent:
+      enabled: true
+      agent:
+        mode: flow

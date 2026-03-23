@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - helmrelease-lgtm.yaml
+  - values/lgtm-values.yaml
+  - values/grafana-values.yaml
+  - values/loki-values.yaml
+  - values/tempo-values.yaml
+  - ../dashboards/

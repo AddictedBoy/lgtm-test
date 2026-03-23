@@ -1,0 +1,20 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: lgtm-test
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/AddictedBoy/lgtm-test
+  ref:
+    branch: main
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: grafana-charts
+  namespace: flux-system
+spec:
+  url: https://grafana.github.io/helm-charts
+  interval: 24h

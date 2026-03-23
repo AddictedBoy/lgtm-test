@@ -1,8 +1,146 @@
-# LGTM Stack - Local Observability Platform
+# LGTM-NPD: FluxCD Configuration for GitHub
 
-A complete observability stack using Grafana's LGTM (Loki-Grafana-Tempo-Mimir) deployed on minikube.
+This repository contains FluxCD manifests to deploy the LGTM (Loki, Grafana, Tempo, Mimir) stack and sample applications.
 
-## 🚀 Quick Start
+## Repository Structure
+
+```
+lgtm-test/
+├── clusters/
+│   └── air-gapped/
+│       ├── flux-system/          # Flux system components
+│       ├── repositories.yaml    # GitRepository & HelmRepository
+│       └── *.yaml               # Kustomizations
+├── apps/                         # Sample applications
+├── infrastructure/               # LGTM HelmRelease
+├── flux-config/                 # Flux components
+├── scripts/                      # Mirroring scripts
+└── .github/workflows/           # GitHub Actions
+```
+
+## Quick Start
+
+### 1. Install Flux
+
+```bash
+brew install fluxcd/tap/flux
+```
+
+### 2. Bootstrap to GitHub
+
+```bash
+flux bootstrap github \
+  --owner=<your-github-org> \
+  --repository=lgtm-test \
+  --branch=main \
+  --path=clusters/air-gapped \
+  --personal
+```
+
+This will:
+- Create a deploy key for read-only access
+- Store the private key as a Kubernetes secret
+- Apply the initial Flux manifests
+
+### 3. Verify Installation
+
+```bash
+flux get all --all-namespaces
+```
+
+You should see:
+- GitRepository: `lgtm-test`
+- HelmRepository: `grafana-charts`
+- Kustomizations: `clusters`, `apps`, `infrastructure`
+
+## Bootstrap Output
+
+After running `flux bootstrap`, you'll see something like:
+
+```
+► installing components in flux-system namespace
+◎ waiting for components to be installed
+✔ installed components
+✔ configured service account for GitHub
+✔ generated deploy key (GitHub deploy key)
+✔ pushing flux-system manifests
+✔ cloning <org>/lgtm-test branch
+✔ reconciling flux-system manifests
+✔ committed flux-system manifests to <org>/lgtm-test/main
+✔ pushed flux-system manifests to <org>/lgtm-test/main
+◎ waiting for kustomization/flux-system to be reconciled
+✔ kustomization/flux-system reconciled
+```
+
+## GitHub Actions (Optional)
+
+The `.github/workflows/flux-sync.yaml` workflow provides additional sync capabilities:
+
+- Triggers on push to `main`
+- Reconciles Flux components automatically
+- Requires `KUBECONFIG` secret configured in GitHub repo
+
+To enable:
+1. Add your kubeconfig as a GitHub secret: `Settings > Secrets > KUBECONFIG`
+2. Enable the workflow on push
+
+## Manual Apply (Without Bootstrap)
+
+If you prefer manual installation:
+
+```bash
+# 1. Install Flux
+kubectl apply -f https://github.com/fluxcd/flux2/releases/latest/download/install.yaml
+
+# 2. Create GitHub token secret
+kubectl create secret generic flux-system \
+  --from-literal=token=<your-github-token> \
+  --namespace=flux-system
+
+# 3. Apply manifests
+kubectl apply -f clusters/air-gapped/repositories.yaml
+kubectl apply -f clusters/air-gapped/kustomization.yaml
+```
+
+## Configuration
+
+### Update GitHub Org/Repo
+
+Edit these files to match your GitHub details:
+
+- `clusters/air-gapped/repositories.yaml` - Change `<org>` to your GitHub org
+- `clusters/air-gapped/flux-system/gotk-sync.yaml` - Change `<org>` to your GitHub org
+
+### Update Helm Charts for Air-Gapped
+
+See `scripts/mirror-helm-charts.sh` to mirror charts to your internal registry.
+
+## Troubleshooting
+
+```bash
+# Check Flux status
+flux logs --level=debug
+
+# Check GitRepository sync
+flux get sources git
+
+# Force reconciliation
+flux reconcile source git lgtm-test
+flux reconcile kustomization apps --with-source
+```
+
+## FluxCD Resources
+
+| Resource | File |
+|----------|------|
+| GitRepository | `clusters/air-gapped/repositories.yaml` |
+| HelmRepository | `clusters/air-gapped/repositories.yaml` |
+| HelmRelease | `infrastructure/helmrelease-lgtm.yaml` |
+| Kustomization | `clusters/air-gapped/*.yaml` |
+
+---
+
+## 🚀 Quick Start (Local Observability Platform)
 
 ```bash
 # Deploy the entire stack
@@ -44,166 +182,6 @@ open http://localhost:3000
 └──────────────┘    └──────────────┘    └──────────────┘
 ```
 
-### Components
-
-| Component   | Purpose                    | Endpoint (internal)                             |
-| ----------- | -------------------------- | ----------------------------------------------- |
-| **Grafana** | Visualization & Dashboards | `grafana.observability.svc:80`                  |
-| **Mimir**   | Metrics storage & query    | `mimir-gateway.observability.svc:80/prometheus` |
-| **Loki**    | Log aggregation & search   | `loki-gateway.observability.svc:80`             |
-| **Tempo**   | Distributed tracing        | `tempo.observability.svc:3100`                  |
-
-## 📝 Available Tasks
-
-### Main Commands
-
-| Task          | Description                             |
-| ------------- | --------------------------------------- |
-| `task up`     | Deploy the complete LGTM stack          |
-| `task down`   | Remove the entire LGTM stack            |
-| `task status` | Show stack status and pod health        |
-| `task verify` | Verify data ingestion in Mimir and Loki |
-
-### Utility Commands
-
-| Task                | Description                      |
-| ------------------- | -------------------------------- |
-| `task url`          | Show access URLs and credentials |
-| `task logs:grafana` | View Grafana logs                |
-| `task logs:mimir`   | View Mimir logs                  |
-| `task logs:loki`    | View Loki logs                   |
-| `task logs:tempo`   | View Tempo logs                  |
-| `task test-metrics` | Push test metrics to Mimir       |
-| `task test-logs`    | Push test logs to Loki           |
-| `task clean`        | Remove everything including data |
-
-## 🔌 Port Forwarding
-
-The stack automatically sets up port-forwarding for Grafana. To manually forward other services:
-
-```bash
-# Mimir (metrics API)
-kubectl port-forward svc/mimir-gateway 8080:80 -n observability
-
-# Loki (logs API)
-kubectl port-forward svc/loki-gateway 3100:80 -n observability
-
-# Tempo (traces API)
-kubectl port-forward svc/tempo 3200:3200 -n observability
-```
-
-## 📊 Pre-configured Datasources
-
-Grafana comes with datasources pre-configured:
-
-1. **Mimir** (Prometheus) - Default datasource for metrics
-2. **Loki** - For log aggregation
-3. **Tempo** - For distributed tracing
-
-## 🔧 Configuration
-
-Edit `values.yaml` to customize:
-
-- Resource limits
-- Retention periods
-- Storage sizes
-- Authentication settings
-
-### Key Settings
-
-```yaml
-# Mimir
-mimir:
-  structuredConfig:
-    multitenancy_enabled: false
-    ingester:
-      ring:
-        replication_factor: 1
-
-# Loki
-loki:
-  auth_enabled: false
-  common:
-    replication_factor: 1
-  limits_config:
-    retention_period: 168h # 7 days
-
-# Grafana
-grafana:
-  admin:
-    password: admin123 # Change in production!
-```
-
-## 📁 Directory Structure
-
-```
-lgtm-stack/
-├── README.md          # This file
-├── Taskfile.yml       # Task definitions
-└── values.yaml        # Helm values for all components
-```
-
-## 🛠️ Troubleshooting
-
-### Pods not starting
-
-```bash
-# Check pod status
-kubectl get pods -n observability
-
-# Check events
-kubectl get events -n observability --sort-by='.lastTimestamp'
-
-# View logs
-kubectl logs -n observability -l app.kubernetes.io/name=mimir
-```
-
-### No metrics/logs appearing
-
-```bash
-# Verify data ingestion
-task verify
-
-# Check agent is collecting
-kubectl get pods -n observability -l app.kubernetes.io/name=grafana-agent
-```
-
-### Port forwarding issues
-
-```bash
-# Kill existing port-forwards
-pkill -f "kubectl.*port-forward"
-
-# Restart port-forward
-task port-forward
-```
-
-## 🔐 Security Notes
-
-⚠️ **This is a development/demo configuration. Do not use in production without:**
-
-- Enabling authentication (`multitenancy_enabled: true`)
-- Changing default passwords
-- Using TLS certificates
-- Setting up proper RBAC
-- Configuring network policies
-
-## 🧹 Cleanup
-
-```bash
-# Remove stack (keeps data)
-task down
-
-# Remove everything including data
-task clean
-
-# Stop minikube
-minikube stop
-
-# Delete minikube
-minikube delete
-```
-
 ## 📚 Documentation
 
 - [Grafana Mimir](https://grafana.com/docs/mimir/latest/)
@@ -211,15 +189,6 @@ minikube delete
 - [Grafana Tempo](https://grafana.com/docs/tempo/latest/)
 - [Grafana Docs](https://grafana.com/docs/grafana/latest/)
 
-## 🤝 Contributing
-
-This is a local development setup. For production use, consider:
-
-- External object storage (S3, GCS, Azure Blob)
-- High availability setup (multiple replicas)
-- Proper backup and disaster recovery
-- Monitoring of the monitoring stack (meta-monitoring)
-
 ---
 
-**Built with ❤️ using Task, Helm, and Grafana's LGTM stack**
+**Built with ❤️ using Task, Helm, FluxCD and Grafana's LGTM stack**

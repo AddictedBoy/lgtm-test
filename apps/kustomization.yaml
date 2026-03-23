@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - helloworld
+  - sample-traces-app
+  - sample-logs-app
+  - sample-metrics-app
+  - sample-otel-traces-app
+  - sample-javascript-traces-app
+  - sample-operator-traces-app
+  - sample-redis
+  - sample-postgres
+  - traffic-generator
