@@ -1,0 +1,400 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apm-traces-dashboard
+  namespace: observability
+  labels:
+    grafana_dashboard: "1"
+data:
+  apm-traces.json: |
+    {
+      "annotations": {
+        "list": []
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 1,
+      "id": null,
+      "links": [
+        {
+          "asDropdown": false,
+          "icon": "external link",
+          "tags": [],
+          "targetBlank": true,
+          "title": "Tempo Service Graph",
+          "tooltip": "Open Service Graph in Tempo",
+          "type": "link",
+          "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+        },
+        {
+          "asDropdown": false,
+          "icon": "external link",
+          "tags": [],
+          "targetBlank": true,
+          "title": "TraceQL",
+          "tooltip": "Open TraceQL in Tempo",
+          "type": "link",
+          "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22%7Bresource.service.name!=%22%22%7D%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+        }
+      ],
+      "liveNow": false,
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+          "id": 1,
+          "panels": [],
+          "title": "APM Overview",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 0.01},
+                  {"color": "red", "value": 0.05}
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 4, "w": 6, "x": 0, "y": 1},
+          "id": 2,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "expr": "sum(rate(traces_spanmetrics_calls_total{status_code!=\"OK\"}[5m])) / sum(rate(traces_spanmetrics_calls_total[5m]))",
+              "legendFormat": "Error Rate",
+              "refId": "A"
+            }
+          ],
+          "title": "Error Rate (5m)",
+          "type": "stat"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 4, "w": 6, "x": 6, "y": 1},
+          "id": 3,
+          "options": {
+            "legend": {"calcs": ["mean"], "displayMode": "list", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "expr": "sum by (resource_service_name) (rate(traces_spanmetrics_calls_total[5m]))",
+              "legendFormat": "{{resource_service_name}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Request Rate by Service",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 4, "w": 6, "x": 12, "y": 1},
+          "id": 4,
+          "options": {
+            "legend": {"calcs": ["mean"], "displayMode": "list", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.99, sum by (le, resource_service_name) (rate(traces_spanmetrics_duration_seconds_bucket[5m])))",
+              "legendFormat": "{{resource_service_name}} p99",
+              "refId": "A"
+            }
+          ],
+          "title": "Latency P99 by Service",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "palette-classic"},
+              "custom": {
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 20,
+                "gradientMode": "none",
+                "hideFrom": {"legend": false, "tooltip": false, "viz": false},
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {"type": "linear"},
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {"group": "A", "mode": "none"},
+                "thresholdsStyle": {"mode": "off"}
+              },
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]},
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 4, "w": 6, "x": 18, "y": 1},
+          "id": 5,
+          "options": {
+            "legend": {"calcs": ["mean"], "displayMode": "list", "placement": "bottom", "showLegend": true},
+            "tooltip": {"mode": "multi", "sort": "none"}
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.50, sum by (le, resource_service_name) (rate(traces_spanmetrics_duration_seconds_bucket[5m])))",
+              "legendFormat": "{{resource_service_name}} p50",
+              "refId": "A"
+            }
+          ],
+          "title": "Latency P50 by Service",
+          "type": "timeseries"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 5},
+          "id": 6,
+          "panels": [],
+          "title": "Service Graph",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
+          "fieldConfig": {
+            "defaults": {
+              "mappings": [],
+              "thresholds": {"mode": "absolute", "steps": [{"color": "green", "value": null}]}
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 12, "w": 24, "x": 0, "y": 6},
+          "id": 7,
+          "options": {"enable": true, "maxNodes": 100, "minNodes": 1},
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "queryType": "serviceGraph",
+              "refId": "A"
+            }
+          ],
+          "title": "Service Graph",
+          "type": "nodeGraph"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {"h": 1, "w": 24, "x": 0, "y": 18},
+          "id": 8,
+          "panels": [],
+          "title": "Top Services by Latency",
+          "type": "row"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 0.5},
+                  {"color": "red", "value": 1}
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 8, "x": 0, "y": 19},
+          "id": 9,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "expr": "topk(5, histogram_quantile(0.99, sum by (resource_service_name) (rate(traces_spanmetrics_duration_seconds_bucket[5m]))))",
+              "legendFormat": "{{resource_service_name}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Top 5 Services - P99 Latency",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "red", "value": 1}
+                ]
+              },
+              "unit": "reqps"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 8, "x": 8, "y": 19},
+          "id": 10,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "expr": "topk(5, sum by (resource_service_name) (rate(traces_spanmetrics_calls_total[5m])))",
+              "legendFormat": "{{resource_service_name}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Top 5 Services - Request Rate",
+          "type": "bargauge"
+        },
+        {
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+          "fieldConfig": {
+            "defaults": {
+              "color": {"mode": "thresholds"},
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {"color": "green", "value": null},
+                  {"color": "yellow", "value": 0.01},
+                  {"color": "red", "value": 0.05}
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {"h": 8, "w": 8, "x": 16, "y": 19},
+          "id": 11,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+            "textMode": "auto"
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "expr": "topk(5, sum by (resource_service_name) (rate(traces_spanmetrics_calls_total{status_code!=\"OK\"}[5m])) / sum by (resource_service_name) (rate(traces_spanmetrics_calls_total[5m])))",
+              "legendFormat": "{{resource_service_name}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Top 5 Services - Error Rate",
+          "type": "bargauge"
+        }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 38,
+      "style": "dark",
+      "tags": ["tempo", "traces", "apm"],
+      "templating": {
+        "list": []
+      },
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "APM - Traces Overview",
+      "uid": "apm-traces-overview",
+      "version": 1,
+      "weekStart": ""
+    }
