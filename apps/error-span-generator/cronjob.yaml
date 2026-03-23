@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: error-span-generator
+  namespace: observability
+spec:
+  schedule: "*/30 * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: curl
+            image: curlimages/curl:8.9.1
+            command:
+            - /bin/sh
+            - -c
+            - |
+              # First, trigger an error span from sample-traces-app by causing an error
+              curl -s -X POST "http://sample-traces-app:8081/order" -H "Content-Type: application/json" -d '{"invalid": "data"}' || true
+              
+              # Trigger error in sample-operator-traces-app
+              curl -s "http://sample-operator-traces-app:8081/health?force_error=1" || true
+              
+              # Trigger error in sample-otel-traces-app  
+              curl -s "http://sample-otel-traces-app:8081/health?force_error=1" || true
+              
+              echo "Error spans generated at $(date)"

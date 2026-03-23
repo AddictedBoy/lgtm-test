@@ -3,7 +3,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.resources import Resource, SERVICE_NAME
-from opentelemetry.trace import SpanKind
+from opentelemetry.trace import SpanKind, StatusCode
 
 import os
 import time
@@ -56,6 +56,16 @@ def get_db_connection():
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"})
+
+@app.route("/generate-error")
+def generate_error():
+    with tracer.start_as_current_span("error-handler", kind=SpanKind.SERVER) as span:
+        span.set_attribute("http.method", "GET")
+        span.set_attribute("http.route", "/generate-error")
+        span.set_attribute("error", True)
+        span.set_status(StatusCode.ERROR, "Simulated error for testing APM dashboard")
+        span.add_event("Error event: This is a test error span")
+    return jsonify({"message": "Error span generated"})
 
 @app.route("/order")
 def order():
