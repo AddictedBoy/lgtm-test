@@ -41,7 +41,17 @@ traces:
 tempo:
   metricsGenerator:
     enabled: true
-    remoteWriteUrl: "http://mimir-gateway.observability.svc:80/api/v1/push"
+    remoteWriteUrl: "http://lgtm-stack-mimir-gateway.observability.svc:80/api/v1/push"
+    processor:
+      local_blocks:
+        filter_all_key: ""
+        flush_check_interval: 10s
+        max_block_duration: 2h
+        max_block_bytes: 100000000
+      service_graphs:
+        wait: 10s
+      span_metrics:
+        enable_target_info: true
   overrides:
     defaults:
       metrics_generator:
