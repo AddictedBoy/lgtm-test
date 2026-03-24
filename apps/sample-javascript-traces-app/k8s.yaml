@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sample-javascript-traces-app
-          image: sample-javascript-traces-app:v82
+          image: sample-javascript-traces-app:v84
           imagePullPolicy: Never
           ports:
             - containerPort: 8082
@@ -35,6 +35,8 @@ spec:
               value: "redis.observability.svc"
             - name: REDIS_SERVER_PORT
               value: "6379"
+            - name: POSTGRES_HOST
+              value: "postgres.observability.svc"
           resources:
             requests:
               cpu: 50m
