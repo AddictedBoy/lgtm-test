@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: sample-traces-app
-          image: sample-traces-app:v3
+          image: sample-traces-app:v5
           imagePullPolicy: Never
           ports:
             - containerPort: 8081

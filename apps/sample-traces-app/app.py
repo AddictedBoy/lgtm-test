@@ -87,6 +87,13 @@ def order():
                 cursor.execute("SELECT count(*) FROM orders")
                 result = cursor.fetchone()
             
+            with tracer.start_as_current_span("redis_get", kind=SpanKind.CLIENT) as redis_span:
+                redis_span.set_attribute("db.system", "redis")
+                redis_span.set_attribute("db.operation", "GET")
+                redis_span.set_attribute("net.peer.name", redis_host)
+                redis_span.set_attribute("net.peer.port", redis_port)
+                redis.get(f"order:{order_id}")
+            
             with tracer.start_as_current_span("redis_set", kind=SpanKind.CLIENT) as redis_span:
                 redis_span.set_attribute("db.system", "redis")
                 redis_span.set_attribute("db.operation", "SET")
