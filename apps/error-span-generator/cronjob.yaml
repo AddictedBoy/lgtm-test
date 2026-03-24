@@ -13,19 +13,42 @@ spec:
         spec:
           restartPolicy: OnFailure
           containers:
-          - name: curl
-            image: curlimages/curl:8.9.1
+          - name: python
+            image: python:3.11-slim
             command:
             - /bin/sh
             - -c
             - |
-              # First, trigger an error span from sample-traces-app by causing an error
-              curl -s -X POST "http://sample-traces-app:8081/order" -H "Content-Type: application/json" -d '{"invalid": "data"}' || true
+              pip install opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp-proto-http -q
+              python3 << 'EOF'
+              import os
+              import time
+              from opentelemetry import trace
+              from opentelemetry.sdk.trace import TracerProvider
+              from opentelemetry.sdk.trace.export import BatchSpanProcessor
+              from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+              from opentelemetry.sdk.resources import Resource, SERVICE_NAME
+              from opentelemetry.trace import SpanKind, StatusCode
               
-              # Trigger error in sample-operator-traces-app
-              curl -s "http://sample-operator-traces-app:8081/health?force_error=1" || true
+              otlp_endpoint = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT", "http://alloy.observability.svc:4318")
               
-              # Trigger error in sample-otel-traces-app  
-              curl -s "http://sample-otel-traces-app:8081/health?force_error=1" || true
+              provider = TracerProvider(resource=Resource(attributes={SERVICE_NAME: "error-generator"}))
+              processor = BatchSpanProcessor(OTLPSpanExporter(endpoint=f"{otlp_endpoint}/v1/traces"))
+              provider.add_span_processor(processor)
+              trace.set_tracer_provider(provider)
               
-              echo "Error spans generated at $(date)"
+              tracer = trace.get_tracer("error-generator")
+              
+              # Generate error spans
+              for i in range(5):
+                  with tracer.start_as_current_span(f"error-operation-{i}", kind=SpanKind.SERVER) as span:
+                      span.set_attribute("http.method", "GET")
+                      span.set_attribute("http.route", f"/error-test-{i}")
+                      span.set_attribute("error", True)
+                      span.set_attribute("error.message", f"Simulated error {i} for APM dashboard")
+                      span.set_status(StatusCode.ERROR, f"Error: Database connection failed - {i}")
+                      span.add_event("Error event: Connection timeout after 30s")
+              
+              print(f"Generated 5 error spans with StatusCode.ERROR")
+              time.sleep(2)
+              EOF
