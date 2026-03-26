@@ -44,21 +44,14 @@ tempo:
     remoteWriteUrl: "http://lgtm-stack-mimir-gateway.observability.svc:80/api/v1/push"
     processor:
       local_blocks:
-        filter_all_key: ""
-        flush_check_interval: 10s
+        filter_server_spans: false
+        flush_to_storage: true
+        trace_idle_period: 10s
         max_block_duration: 2h
-        max_block_bytes: 100000000
       service_graphs:
         wait: 10s
       span_metrics:
         enable_target_info: true
-  overrides:
-    defaults:
-      metrics_generator:
-        processors:
-          - service-graphs
-          - span-metrics
-          - local-blocks
 
 # Retention
 compactor:
