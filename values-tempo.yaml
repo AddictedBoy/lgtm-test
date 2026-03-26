@@ -52,6 +52,13 @@ tempo:
         wait: 10s
       span_metrics:
         enable_target_info: true
+  overrides:
+    defaults:
+      metrics_generator:
+        processors:
+          - service-graphs
+          - span-metrics
+          - local-blocks
 
 # Retention
 compactor:
