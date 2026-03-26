@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: sample-javascript-traces-app
-          image: sample-javascript-traces-app:v82
+          image: sample-javascript-traces-app:v85
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8082
