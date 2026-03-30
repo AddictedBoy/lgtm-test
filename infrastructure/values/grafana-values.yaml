@@ -135,7 +135,7 @@ data:
                   "title": "Tempo Service Graph",
                   "tooltip": "Open Service Graph in Tempo",
                   "type": "link",
-                  "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+                  "url": "/explore?left=%7B%22datasourceUid%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
                 },
                 {
                   "asDropdown": false,
@@ -145,342 +145,86 @@ data:
                   "title": "TraceQL",
                   "tooltip": "Open TraceQL in Tempo",
                   "type": "link",
-                  "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22%7Bresource.service.name!=%22%22%7D%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+                  "url": "/explore?left=%7B%22datasourceUid%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22%7Bresource.service.name!=%22%22%7D%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
                 }
               ],
               "liveNow": false,
               "panels": [
                 {
                   "collapsed": false,
-                  "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+                  "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 },
                   "id": 1,
-                  "panels": [],
-                  "title": "Traces Summary",
-                  "type": "row"
-                },
-                {
-                  "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
-                  "fieldConfig": {
-                    "defaults": {
-                      "color": {"mode": "thresholds"},
-                      "mappings": [],
-                      "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                          {"color": "green", "value": null},
-                          {"color": "blue", "value": 80}
-                        ]
-                      },
-                      "unit": "short"
-                    },
-                    "overrides": []
-                  },
-                  "gridPos": {"h": 4, "w": 8, "x": 0, "y": 1},
-                  "id": 2,
-                  "options": {
-                    "colorMode": "value",
-                    "graphMode": "area",
-                    "justifyMode": "auto",
-                    "orientation": "auto",
-                    "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
-                    "textMode": "auto"
-                  },
-                  "pluginVersion": "12.3.1",
-                  "targets": [
-                    {
-                      "query": "{resource.service.name!=\"\"}",
-                      "refId": "A",
-                      "queryType": "traceql"
-                    }
-                  ],
-                  "title": "Total Traces",
-                  "type": "stat"
-                },
-                {
-                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
-                  "fieldConfig": {
-                    "defaults": {
-                      "color": {"mode": "thresholds"},
-                      "mappings": [],
-                      "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                          {"color": "green", "value": null},
-                          {"color": "green", "value": 0},
-                          {"color": "#EAB839", "value": 20},
-                          {"color": "red", "value": 50}
-                        ]
-                      },
-                      "unit": "short"
-                    },
-                    "overrides": []
-                  },
-                  "gridPos": {"h": 4, "w": 8, "x": 8, "y": 1},
-                  "id": 3,
-                  "options": {
-                    "colorMode": "value",
-                    "graphMode": "area",
-                    "justifyMode": "auto",
-                    "orientation": "auto",
-                    "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
-                    "textMode": "auto"
-                  },
-                  "pluginVersion": "12.3.1",
-                  "targets": [
-                    {
-                      "expr": "sum(rate(traces_spanmetrics_calls_total{status_code=\"STATUS_CODE_ERROR\"}[5m]))",
-                      "legendFormat": "Error Spans",
-                      "refId": "A"
-                    }
-                  ],
-                  "title": "Error Spans",
-                  "type": "stat"
-                },
-                {
-                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
-                  "fieldConfig": {
-                    "defaults": {
-                      "color": {"mode": "thresholds"},
-                      "mappings": [],
-                      "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                          {"color": "green", "value": null},
-                          {"color": "#EAB839", "value": 300},
-                          {"color": "red", "value": 800}
-                        ]
-                      },
-                      "unit": "ms"
-                    },
-                    "overrides": []
-                  },
-                  "gridPos": {"h": 4, "w": 8, "x": 16, "y": 1},
-                  "id": 4,
-                  "options": {
-                    "colorMode": "value",
-                    "graphMode": "area",
-                    "justifyMode": "auto",
-                    "orientation": "auto",
-                    "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
-                    "textMode": "auto"
-                  },
-                  "pluginVersion": "12.3.1",
-                  "targets": [
-                    {
-                      "expr": "histogram_quantile(0.95, sum(rate(traces_spanmetrics_duration_seconds_bucket[5m])) by (le)) * 1000",
-                      "legendFormat": "p95",
-                      "refId": "A"
-                    }
-                  ],
-                  "title": "Average Span Duration (p95)",
-                  "type": "stat"
-                },
-                {
-                  "collapsed": false,
-                  "gridPos": {"h": 1, "w": 24, "x": 0, "y": 5},
-                  "id": 5,
                   "panels": [],
                   "title": "Service Dependency Map",
                   "type": "row"
                 },
                 {
-                  "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
+                  "datasource": { "type": "tempo", "uid": "tempo" },
                   "fieldConfig": {
-                    "defaults": {
-                      "color": {"mode": "palette-classic"},
-                      "custom": {},
-                      "mappings": [],
-                      "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                          {"color": "green", "value": null}
-                        ]
-                      }
-                    },
+                    "defaults": { "color": { "mode": "palette-classic" }, "custom": {}, "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] } },
                     "overrides": []
                   },
-                  "gridPos": {"h": 12, "w": 24, "x": 0, "y": 6},
-                  "id": 6,
-                  "options": {
-                    "edges": {},
-                    "nodes": {},
-                    "layoutAlgorithm": "layered",
-                    "zoomMode": "cooperative"
-                  },
+                  "gridPos": { "h": 12, "w": 24, "x": 0, "y": 1 },
+                  "id": 2,
+                  "options": { "edges": {}, "nodes": {}, "layoutAlgorithm": "layered", "zoomMode": "cooperative" },
                   "pluginVersion": "12.3.1",
                   "targets": [
-                    {
-                      "query": "{resource.service.name!=\"\"}",
-                      "refId": "A",
-                      "queryType": "serviceGraph"
-                    }
+                    { "query": "", "refId": "A", "queryType": "serviceMap" }
                   ],
                   "title": "Service Dependency Map",
                   "type": "nodeGraph"
                 },
                 {
                   "collapsed": false,
-                  "gridPos": {"h": 1, "w": 24, "x": 0, "y": 18},
-                  "id": 7,
+                  "gridPos": { "h": 1, "w": 24, "x": 0, "y": 13 },
+                  "id": 3,
                   "panels": [],
-                  "title": "Traces Waterfall",
+                  "title": "Recent Traces",
                   "type": "row"
                 },
                 {
-                  "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
-                  "fieldConfig": {
-                    "defaults": {},
-                    "overrides": []
-                  },
-                  "gridPos": {"h": 12, "w": 24, "x": 0, "y": 19},
-                  "id": 8,
-                  "options": {
-                    "spanFilters": {
-                      "adhocFilters": [],
-                      "criticalPathOnly": false,
-                      "matchesOnly": false
-                    }
-                  },
-                  "pluginVersion": "12.3.1",
-                  "targets": [
-                    {
-                      "query": "{resource.service.name!=\"\"}",
-                      "refId": "A",
-                      "queryType": "traceql"
-                    }
-                  ],
-                  "title": "Trace Waterfall View",
-                  "type": "traces"
-                },
-                {
-                  "collapsed": false,
-                  "gridPos": {"h": 1, "w": 24, "x": 0, "y": 31},
-                  "id": 9,
-                  "panels": [],
-                  "title": "Span Analysis",
-                  "type": "row"
-                },
-                {
-                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
+                  "datasource": { "type": "tempo", "uid": "tempo" },
                   "fieldConfig": {
                     "defaults": {
-                      "color": {"mode": "palette-classic"},
-                      "custom": {
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "barWidthFactor": 0.6,
-                        "drawStyle": "line",
-                        "fillOpacity": 15,
-                        "gradientMode": "none",
-                        "hideFrom": {"legend": false, "tooltip": false, "viz": false},
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {"type": "linear"},
-                        "showPoints": "auto",
-                        "showValues": false,
-                        "spanNulls": false,
-                        "stacking": {"group": "A", "mode": "none"},
-                        "thresholdsStyle": {"mode": "off"}
-                      },
-                      "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                          {"color": "green", "value": null},
-                          {"color": "red", "value": 80}
-                        ]
-                      },
-                      "unit": "ms"
+                      "color": { "mode": "thresholds" },
+                      "custom": { "align": "auto", "cellOptions": { "type": "auto" }, "inspect": false },
+                      "mappings": [],
+                      "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }] }
                     },
                     "overrides": []
                   },
-                  "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32},
-                  "id": 10,
-                  "options": {
-                    "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true},
-                    "tooltip": {"hideZeros": false, "mode": "single", "sort": "none"}
-                  },
+                  "gridPos": { "h": 14, "w": 24, "x": 0, "y": 14 },
+                  "id": 4,
+                  "options": { "showHeader": true },
                   "pluginVersion": "12.3.1",
                   "targets": [
+                    { "filters": [], "limit": 20, "refId": "A", "queryType": "search" }
+                  ],
+                  "title": "Recent Traces",
+                  "transformations": [
                     {
-                      "expr": "histogram_quantile(0.5, sum(rate(traces_spanmetrics_duration_seconds_bucket[5m])) by (le, resource.service.name)) * 1000",
-                      "legendFormat": "{{resource.service.name}}",
-                      "refId": "A"
+                      "id": "organize",
+                      "options": {
+                        "excludeByName": { "trace_id": true },
+                        "includeByName": { "Duration": true, "Name": true, "Root Service": true, "Root Span": true, "Service": true, "Trace ID": true },
+                        "renameByName": { "Duration": "Duration", "Name": "Span Name", "Root Service": "Root Service", "Root Span": "Root Span", "Service": "Service", "Trace ID": "Trace ID" }
+                      }
                     }
                   ],
-                  "title": "Span Duration Over Time",
-                  "type": "timeseries"
-                },
-                {
-                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
-                  "fieldConfig": {
-                    "defaults": {
-                      "color": {"mode": "palette-classic"},
-                      "custom": {
-                        "axisCenteredZero": false,
-                        "axisColorMode": "text",
-                        "axisLabel": "",
-                        "axisPlacement": "auto",
-                        "barAlignment": 0,
-                        "barWidthFactor": 0.6,
-                        "drawStyle": "line",
-                        "fillOpacity": 15,
-                        "gradientMode": "none",
-                        "hideFrom": {"legend": false, "tooltip": false, "viz": false},
-                        "insertNulls": false,
-                        "lineInterpolation": "linear",
-                        "lineWidth": 1,
-                        "pointSize": 5,
-                        "scaleDistribution": {"type": "linear"},
-                        "showPoints": "auto",
-                        "showValues": false,
-                        "spanNulls": false,
-                        "stacking": {"group": "A", "mode": "none"},
-                        "thresholdsStyle": {"mode": "line"}
-                      },
-                      "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                          {"color": "red", "value": null}
-                        ]
-                      },
-                      "unit": "short"
-                    },
-                    "overrides": []
-                  },
-                  "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32},
-                  "id": 11,
-                  "options": {
-                    "legend": {"calcs": [], "displayMode": "list", "placement": "bottom", "showLegend": true},
-                    "tooltip": {"hideZeros": false, "mode": "single", "sort": "none"}
-                  },
-                  "pluginVersion": "12.3.1",
-                  "targets": [
-                    {
-                      "expr": "sum(rate(traces_spanmetrics_calls_total{status_code=\"STATUS_CODE_ERROR\"}[5m])) by (resource.service.name)",
-                      "legendFormat": "{{resource.service.name}}",
-                      "refId": "A"
-                    }
-                  ],
-                  "title": "Error Spans Over Time",
-                  "type": "timeseries"
+                  "type": "table"
                 }
               ],
               "refresh": "5s",
               "schemaVersion": 38,
               "style": "dark",
               "tags": ["traces", "tempo"],
-              "templating": {"list": []},
-              "time": {"from": "now-6h", "to": "now"},
+              "templating": { "list": [] },
+              "time": { "from": "now-6h", "to": "now" },
               "timepicker": {},
               "timezone": "",
               "title": "Traces Dashboard",
               "uid": "traces-dashboard",
-              "version": 1,
+              "version": 3,
               "weekStart": ""
             }
         helloworld:
