@@ -49,7 +49,7 @@ data:
           "type": "row"
         },
         {
-          "datasource": {"type": "tempo", "uid": "tempo"},
+          "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
           "fieldConfig": {
             "defaults": {
               "color": {"mode": "thresholds"},
@@ -87,7 +87,7 @@ data:
           "type": "stat"
         },
         {
-          "datasource": {"type": "prometheus", "uid": "mimir"},
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
           "fieldConfig": {
             "defaults": {
               "color": {"mode": "thresholds"},
@@ -127,7 +127,7 @@ data:
           "type": "stat"
         },
         {
-          "datasource": {"type": "prometheus", "uid": "mimir"},
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
           "fieldConfig": {
             "defaults": {
               "color": {"mode": "thresholds"},
@@ -174,7 +174,7 @@ data:
           "type": "row"
         },
         {
-          "datasource": {"type": "tempo", "uid": "tempo"},
+          "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
           "fieldConfig": {
             "defaults": {
               "color": {"mode": "palette-classic"},
@@ -217,7 +217,7 @@ data:
           "type": "row"
         },
         {
-          "datasource": {"type": "tempo", "uid": "tempo"},
+          "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
           "fieldConfig": {
             "defaults": {},
             "overrides": []
@@ -251,7 +251,7 @@ data:
           "type": "row"
         },
         {
-          "datasource": {"type": "prometheus", "uid": "mimir"},
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
           "fieldConfig": {
             "defaults": {
               "color": {"mode": "palette-classic"},
@@ -306,7 +306,7 @@ data:
           "type": "timeseries"
         },
         {
-          "datasource": {"type": "prometheus", "uid": "mimir"},
+          "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
           "fieldConfig": {
             "defaults": {
               "color": {"mode": "palette-classic"},
