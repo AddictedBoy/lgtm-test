@@ -135,7 +135,7 @@ data:
                   "title": "Tempo Service Graph",
                   "tooltip": "Open Service Graph in Tempo",
                   "type": "link",
-                  "url": "/explore?left=%7B%22datasourceUid%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+                  "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
                 },
                 {
                   "asDropdown": false,
@@ -145,7 +145,7 @@ data:
                   "title": "TraceQL",
                   "tooltip": "Open TraceQL in Tempo",
                   "type": "link",
-                  "url": "/explore?left=%7B%22datasourceUid%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22%7Bresource.service.name!=%22%22%7D%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+                  "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22%7Bresource.service.name!=%22%22%7D%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
                 }
               ],
               "liveNow": false,
@@ -159,7 +159,7 @@ data:
                   "type": "row"
                 },
                 {
-                  "datasource": {"type": "tempo", "uid": "tempo"},
+                  "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
                   "fieldConfig": {
                     "defaults": {
                       "color": {"mode": "thresholds"},
@@ -197,7 +197,7 @@ data:
                   "type": "stat"
                 },
                 {
-                  "datasource": {"type": "prometheus", "uid": "mimir"},
+                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
                   "fieldConfig": {
                     "defaults": {
                       "color": {"mode": "thresholds"},
@@ -237,7 +237,7 @@ data:
                   "type": "stat"
                 },
                 {
-                  "datasource": {"type": "prometheus", "uid": "mimir"},
+                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
                   "fieldConfig": {
                     "defaults": {
                       "color": {"mode": "thresholds"},
@@ -284,7 +284,7 @@ data:
                   "type": "row"
                 },
                 {
-                  "datasource": {"type": "tempo", "uid": "tempo"},
+                  "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
                   "fieldConfig": {
                     "defaults": {
                       "color": {"mode": "palette-classic"},
@@ -327,7 +327,7 @@ data:
                   "type": "row"
                 },
                 {
-                  "datasource": {"type": "tempo", "uid": "tempo"},
+                  "datasource": {"type": "tempo", "uid": "P214B5B846CF3925F"},
                   "fieldConfig": {
                     "defaults": {},
                     "overrides": []
@@ -361,7 +361,7 @@ data:
                   "type": "row"
                 },
                 {
-                  "datasource": {"type": "prometheus", "uid": "mimir"},
+                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
                   "fieldConfig": {
                     "defaults": {
                       "color": {"mode": "palette-classic"},
@@ -416,7 +416,7 @@ data:
                   "type": "timeseries"
                 },
                 {
-                  "datasource": {"type": "prometheus", "uid": "mimir"},
+                  "datasource": {"type": "prometheus", "uid": "PAE45454D0EDB9216"},
                   "fieldConfig": {
                     "defaults": {
                       "color": {"mode": "palette-classic"},
