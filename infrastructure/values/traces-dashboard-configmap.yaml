@@ -25,7 +25,7 @@ data:
           "title": "Tempo Service Graph",
           "tooltip": "Open Service Graph in Tempo",
           "type": "link",
-          "url": "/explore?left=%7B%22datasourceUid%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+          "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22serviceGraph%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
         },
         {
           "asDropdown": false,
@@ -35,7 +35,7 @@ data:
           "title": "TraceQL",
           "tooltip": "Open TraceQL in Tempo",
           "type": "link",
-          "url": "/explore?left=%7B%22datasourceUid%22:%22tempo%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22%7Bresource.service.name!=%22%22%7D%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
+          "url": "/explore?left=%7B%22datasourceUid%22:%22P214B5B846CF3925F%22,%22queries%22:%5B%7B%22refId%22:%22A%22,%22queryType%22:%22traceql%22,%22query%22:%22%7Bresource.service.name!=%22%22%7D%22%7D%5D,%22range%22:%7B%22from%22:%22now-1h%22,%22to%22:%22now%22%7D%7D"
         }
       ],
       "liveNow": false,
@@ -200,9 +200,9 @@ data:
           "pluginVersion": "12.3.1",
           "targets": [
             {
-              "query": "{resource.service.name!=\"\"}",
+              "query": "",
               "refId": "A",
-              "queryType": "serviceGraph"
+              "queryType": "serviceMap"
             }
           ],
           "title": "Service Dependency Map",
@@ -234,7 +234,7 @@ data:
           "pluginVersion": "12.3.1",
           "targets": [
             {
-              "query": "{resource.service.name!=\"\"}",
+              "query": "",
               "refId": "A",
               "queryType": "traceql"
             }
@@ -297,12 +297,12 @@ data:
           "pluginVersion": "12.3.1",
           "targets": [
             {
-              "expr": "histogram_quantile(0.5, sum(rate(traces_spanmetrics_duration_seconds_bucket[5m])) by (le, resource.service.name)) * 1000",
-              "legendFormat": "{{resource.service.name}}",
+              "expr": "sum(rate(traces_spanmetrics_calls_total[5m])) by (name)",
+              "legendFormat": "{{name}}",
               "refId": "A"
             }
           ],
-          "title": "Span Duration Over Time",
+          "title": "Span Rate",
           "type": "timeseries"
         },
         {
@@ -351,8 +351,8 @@ data:
           "pluginVersion": "12.3.1",
           "targets": [
             {
-              "expr": "sum(rate(traces_spanmetrics_calls_total{status_code=\"STATUS_CODE_ERROR\"}[5m])) by (resource.service.name)",
-              "legendFormat": "{{resource.service.name}}",
+              "expr": "sum(rate(traces_spanmetrics_calls_total{status_code=\"STATUS_CODE_ERROR\"}[5m])) by (name)",
+              "legendFormat": "{{name}}",
               "refId": "A"
             }
           ],
