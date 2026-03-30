@@ -3,3 +3,4 @@ kind: Kustomization
 
 resources:
   - dashboard-configmap.yaml
+  - drilldown-configmap.yaml
